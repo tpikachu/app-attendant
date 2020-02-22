@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Server</title>
+    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+    <header>
+        <div id="close" onclick="closeWindow()">✕</div>
+    </header>
+    <div id="drag-file">
+        <p id="drag-text">Drag your files here to open them on a live server</p>
+    </div>
+
+
+    <script>
+        const remote = require('electron').remote
+        var win = remote.getCurrentWindow();
+
+        function drag() {
+            console.log('dragged');
+            document.getElementById(" drag-file ").style.opacity = "1 ";
+        }
+
+        function closeWindow() {
+            win.close();
+        }
+
+
+        (function() {
+            var holder = document.getElementById('drag-file');
+            holder.ondragover = () => {
+                return false;
+            };
+            holder.ondragleave = () => {
+                return false;
+            };
+            holder.ondragend = () => {
+                return false;
+            };
+            holder.ondrop = (e) => {
+                e.preventDefault();
+                for (let f of e.dataTransfer.files) {
+                    let path = f.path;
+                    window.alert("Serving file: " + path + "\n\nOpening in default browser in just a moment.")
+                    const exec = require('child_process').exec;
+
+                    function execute(command, callback) {
+                        exec(command, (error, stdout, stderr) => {
+                            callback(stdout);
+                        });
+                    };
+                    execute('live-server ' + path, (output) => {
+                        console.log(output);
+                    });
+                }
+                return false;
+            };
+        })();
+    </script>
+</body>
+
+</html>

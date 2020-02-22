@@ -1,0 +1,30 @@
+{
+    "name": "attendant",
+    "productName": "Attendant",
+    "version": "1.1.0",
+    "description": "A simple app to streamline web development by allowing you index.html to open on a live server in the default browser",
+    "main": "./main.js",
+    "scripts": {
+        "start": "electron .",
+        "pack": "electron-builder --dir",
+        "dist": "electron-builder build"
+    },
+    "build": {
+        "productName": "Attendant",
+        "appId": "com.Attendant",
+        "win": {
+            "target": [
+                "nsis",
+                "msi"
+            ]
+        },
+        "directories": {
+            "buildResources": "resources",
+            "output": "release"
+        }
+    },
+    "devDependencies": {
+        "electron": "^8.0.1",
+        "electron-builder": "^22.3.2"
+    }
+}
